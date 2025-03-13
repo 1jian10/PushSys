@@ -4,22 +4,21 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"puhser/client"
-	"puhser/config"
+	svc "puhser/internal/context"
 )
 
-var UpGrader websocket.Upgrader
-
-func Init(c config.Config) {
+func Init(ctx *svc.Context) {
+	Ctx = ctx
 	UpGrader = websocket.Upgrader{
-		ReadBufferSize:  c.Websocket.ReadBufferSize,
-		WriteBufferSize: c.Websocket.WriteBufferSize,
+		ReadBufferSize:  ctx.Config.Websocket.ReadBufferSize,
+		WriteBufferSize: ctx.Config.Websocket.WriteBufferSize,
 	}
+
 	//gin.SetMode(gin.ReleaseMode)
 	//gin.DefaultWriter = ioutil.Discard
 	engine := gin.Default()
 	engine.GET("/ToWebSocket", ToWebSocket)
-	err := engine.Run(":" + c.Websocket.Port)
+	err := engine.Run(":" + ctx.Config.Websocket.Port)
 	if err != nil {
 		panic(err)
 	}
@@ -39,5 +38,5 @@ func ToWebSocket(ctx *gin.Context) {
 		fmt.Println(err.Error())
 		return
 	}
-	client.NewClient(conn, session)
+	NewClient(conn, session)
 }

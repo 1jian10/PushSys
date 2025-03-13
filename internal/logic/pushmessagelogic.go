@@ -3,9 +3,10 @@ package logic
 import (
 	"context"
 	"github.com/google/uuid"
-	"puhser/client"
-	"puhser/internal/svc"
+	"puhser/internal/context"
 	"puhser/proto/push"
+	"puhser/route"
+	"puhser/test"
 	"strconv"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -13,11 +14,11 @@ import (
 
 type PushMessageLogic struct {
 	ctx    context.Context
-	svcCtx *svc.ServiceContext
+	svcCtx *svc.Context
 	logx.Logger
 }
 
-func NewPushMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PushMessageLogic {
+func NewPushMessageLogic(ctx context.Context, svcCtx *svc.Context) *PushMessageLogic {
 	return &PushMessageLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
@@ -27,7 +28,7 @@ func NewPushMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PushM
 
 func (l *PushMessageLogic) PushMessage(in *push.PushMessageReq) (*push.PushMessageResp, error) {
 	uid := uuid.New().String()
-	msg := &client.Message{
+	msg := &route.Message{
 		UUId:       uid,
 		PayLoad:    in.PayLoad,
 		EncodeType: in.EncodeType,
@@ -37,7 +38,7 @@ func (l *PushMessageLogic) PushMessage(in *push.PushMessageReq) (*push.PushMessa
 		if !ok {
 			continue
 		}
-		c := value.(*client.Client)
+		c := value.(*route.Client)
 		msg.Session = c.Session
 		c.Send(msg)
 	}

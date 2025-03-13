@@ -2,29 +2,40 @@ package service
 
 import (
 	"context"
+	"fmt"
 	etcd "go.etcd.io/etcd/client/v3"
-	"puhser/config"
+	"google.golang.org/grpc"
+	"net"
+	svc "puhser/internal/context"
+	"puhser/internal/server"
+	"puhser/proto/push"
 	"strconv"
 	"time"
 )
 
-func Init(c config.Config) *etcd.Client {
+func Init(ctx *svc.Context) {
 	var err error
-	EClient, err := etcd.New(etcd.Config{
-		Endpoints:   c.Etcd.EndPoints,
-		DialTimeout: time.Duration(c.Etcd.DialTimeout) * time.Second,
-	})
-	if err != nil {
-		panic(err.Error())
-	}
-	_, err = RegisterService(c, EClient)
+
+	_, err = RegisterService(ctx)
 	if err != nil {
 		panic(err)
 	}
-	return EClient
+	lis, err := net.Listen("tcp", ctx.Config.Etcd.Addr)
+	if err != nil {
+		panic(err.Error())
+	}
+	grpcServer := grpc.NewServer()
+	push.RegisterPushMessageServiceServer(grpcServer, server.NewPushMessageServiceServer(ctx))
+	fmt.Println("rpc begin listening:" + ctx.Config.Etcd.Addr)
+	if err = grpcServer.Serve(lis); err != nil {
+		panic(err.Error())
+	}
 }
 
-func RegisterService(c config.Config, EClient *etcd.Client) (etcd.LeaseID, error) {
+func RegisterService(ctx *svc.Context) (etcd.LeaseID, error) {
+
+	EClient := ctx.EClient
+	c := ctx.Config
 	grantResp, err := EClient.Grant(context.Background(), c.Etcd.TTL)
 	if err != nil {
 		return 0, err

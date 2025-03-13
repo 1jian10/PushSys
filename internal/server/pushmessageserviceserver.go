@@ -7,17 +7,17 @@ package server
 import (
 	"context"
 
+	"puhser/internal/context"
 	"puhser/internal/logic"
-	"puhser/internal/svc"
 	"puhser/proto/push"
 )
 
 type PushMessageServiceServer struct {
-	svcCtx *svc.ServiceContext
+	svcCtx *svc.Context
 	push.UnimplementedPushMessageServiceServer
 }
 
-func NewPushMessageServiceServer(svcCtx *svc.ServiceContext) *PushMessageServiceServer {
+func NewPushMessageServiceServer(svcCtx *svc.Context) *PushMessageServiceServer {
 	return &PushMessageServiceServer{
 		svcCtx: svcCtx,
 	}

@@ -1,19 +1,15 @@
 package main
 
 import (
-	"puhser/client"
-	"puhser/config"
-	rpc "puhser/proto"
+	svc "puhser/internal/context"
 	"puhser/route"
 	"puhser/service"
 )
 
 func main() {
-	c := config.ReadConfig()
+	ctx := svc.NewContext("./internal/config/config.yaml")
 
-	client.Init(c)
-	service.Init(c)
-	go rpc.Init(c)
-	route.Init(c)
+	go service.Init(ctx)
+	route.Init(ctx)
 
 }

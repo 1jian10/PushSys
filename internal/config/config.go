@@ -21,9 +21,9 @@ type Config struct {
 	}
 }
 
-func ReadConfig() Config {
+func ReadConfig(file string) Config {
 	var c Config
-	viper.SetConfigFile("./config/config.yaml")
+	viper.SetConfigFile(file)
 	if err := viper.ReadInConfig(); err != nil {
 		panic(err.Error())
 	}
