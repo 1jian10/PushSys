@@ -1,6 +1,14 @@
-Name:
-ListenOn: 0.0.0.0:8080
+Name: InnerGetWay
+ListenOn: 0.0.0.0:23331
 Etcd:
   Hosts:
-  - 127.0.0.1:2379
-  Key: in.rpc
+  - 127.0.0.1:4379
+  Key: Services/InnerGetWay
+WatchPrefix: Services/Pusher
+
+MRedis:
+  Host: 127.0.0.1:6379
+  DB: 1
+NSQ:
+  Addr: 127.0.0.1:4150
+  Topic: GlobalMessage

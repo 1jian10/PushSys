@@ -39,7 +39,7 @@ func RegisterService(ctx *svc.Context) (etcd.LeaseID, error) {
 	if err != nil {
 		return 0, err
 	}
-	name := c.Etcd.Name + "/" + strconv.FormatInt(time.Now().UnixMilli(), 10)
+	name := c.Etcd.Name + "/" + strconv.FormatInt(time.Now().UnixNano(), 10)
 	_, err = EClient.Put(context.Background(), name, c.Etcd.Addr, etcd.WithLease(grantResp.ID))
 	if err != nil {
 		return 0, err

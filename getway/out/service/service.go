@@ -40,9 +40,7 @@ func InitService(ctx *svc.Context) {
 		panic(err)
 	}
 	for _, v := range resp.Kvs {
-		for _, addr := range v.Value {
-			OldAddr = append(OldAddr, string(addr))
-		}
+		OldAddr = append(OldAddr, string(v.Value))
 	}
 	go Watch(ctx)
 }

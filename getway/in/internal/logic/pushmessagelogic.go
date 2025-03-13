@@ -50,15 +50,16 @@ func PushMessageGlobal(ctx *svc.ServiceContext, in *InnerGetWay.PushMessageReq) 
 			PayLoad:    in.PayLoad,
 			EncodeType: in.EncodeType,
 		},
-		BucketId: 0,
 	}
-	msg, err := json.Marshal(req)
-	if err != nil {
-		return nil, err
+	for i := 0; i < 100; i++ {
+		req.BucketId = int64(i)
+		msg, err := json.Marshal(req)
+		if err != nil {
+			continue
+		}
+		_ = ctx.Producer.Publish(ctx.Config.NSQ.Topic, msg)
 	}
-	if err := ctx.Producer.Publish("topic", msg); err != nil {
-		return nil, err
-	}
+
 	return &InnerGetWay.PushMessageResp{}, nil
 
 }

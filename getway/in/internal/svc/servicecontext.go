@@ -23,20 +23,20 @@ type ServiceContext struct {
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	EClient, err := etcd.New(etcd.Config{
-		Endpoints:   []string{"127.0.0.1:4379"},
+		Endpoints:   c.Etcd.Hosts,
 		DialTimeout: 5 * time.Second,
 	})
 	if err != nil {
 		panic(err.Error())
 	}
 	rdb := redis.NewClient(&redis.Options{
-		Addr: "addr",
-		DB:   1,
+		Addr: c.MRedis.Host,
+		DB:   c.MRedis.DB,
 	})
 	if err = rdb.Ping(context.Background()).Err(); err != nil {
 		panic(err.Error())
 	}
-	producer, err := nsq.NewProducer("addr", nsq.NewConfig())
+	producer, err := nsq.NewProducer(c.NSQ.Addr, nsq.NewConfig())
 	if err != nil {
 		panic(err.Error())
 	}
@@ -54,7 +54,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 
 func Watch(svc *ServiceContext) {
 	watcher := etcd.NewWatcher(svc.EClient)
-	WatchChan := watcher.Watch(context.Background(), "key", etcd.WithPrefix())
+	WatchChan := watcher.Watch(context.Background(), svc.Config.WatchPrefix, etcd.WithPrefix())
 	for resp := range WatchChan {
 		for _, ev := range resp.Events {
 			if ev.Type == etcd.EventTypePut {
@@ -68,14 +68,12 @@ func Watch(svc *ServiceContext) {
 
 func InitService(svc *ServiceContext) {
 	kv := etcd.NewKV(svc.EClient)
-	resp, err := kv.Get(context.Background(), "key", etcd.WithPrefix())
+	resp, err := kv.Get(context.Background(), svc.Config.WatchPrefix, etcd.WithPrefix())
 	if err != nil {
 		panic(err)
 	}
 	for _, v := range resp.Kvs {
-		for _, addr := range v.Value {
-			ConnService(svc, string(addr))
-		}
+		ConnService(svc, string(v.Value))
 	}
 }
 

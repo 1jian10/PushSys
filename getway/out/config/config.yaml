@@ -7,4 +7,4 @@ Etcd:
   #监测服务的key的前缀
   WatchPrefix: Services/Pusher
 #http监听端口号
-Port: 23331
+Port: 23321
