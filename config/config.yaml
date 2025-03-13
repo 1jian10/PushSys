@@ -1,0 +1,23 @@
+websocket:
+  #读缓冲区大小
+  ReadBufferSize: 128
+  #写缓冲区大小
+  WriteBufferSize: 1024
+  #websocket升级监听端口号
+  Port: 23311
+etcd:
+  #etcd地址
+  Endpoints: 127.0.0.1:4379
+  #连接超时时间(second)
+  DialTimeout: 5
+  #服务名称
+  Name: Services/Pusher
+  #服务地址
+  Addr: 127.0.0.1:23301
+  #租约时间(second)
+  TTL: 10
+redis:
+  #redis地址
+  Addr: 127.0.0.1:6379
+  #redis数据库编号
+  DB: 1
