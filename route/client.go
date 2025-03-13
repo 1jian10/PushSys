@@ -10,18 +10,26 @@ import (
 	"time"
 )
 
-func (c *Client) Send(message *Message) error {
-	if err := c.conn.SetWriteDeadline(time.Now().Add(time.Second * 5)); err != nil {
-		return err
+func (c *Client) Send(message *Message) {
+	if err := c.conn.SetWriteDeadline(time.Now().Add(time.Second * time.Duration(Ctx.Config.Websocket.WriteTimeout))); err != nil {
+		return
 	}
 	msg, err := json.Marshal(*message)
 	if err != nil {
-		return err
+		return
 	}
 	if err = c.conn.WriteMessage(websocket.BinaryMessage, msg); err != nil {
-		return err
+		return
 	}
-	return nil
+	return
+}
+
+func SendGlobalMessage(bucketId int64, message *Message) {
+	Bucket[bucketId].Range(func(k, v interface{}) bool {
+		c := v.(*Client)
+		c.Send(message)
+		return true
+	})
 }
 
 func GetUserId(session string) (int64, error) {
@@ -40,7 +48,7 @@ func NewClient(conn *websocket.Conn, session string) {
 		bucketId: id % 100,
 		conn:     conn,
 	}
-	rdb.Set(context.Background(), "pusher:"+c.userId, Ctx.Config.Etcd.Addr, 2*time.Minute)
+	rdb.Set(context.Background(), "pusher:"+c.userId, Ctx.Config.Etcd.Addr, time.Second*time.Duration(Ctx.Config.Redis.TTL))
 	Bucket[c.bucketId].Store(c.userId, c)
 	go c.HeartCheck()
 }
@@ -48,14 +56,14 @@ func NewClient(conn *websocket.Conn, session string) {
 func (c *Client) HeartCheck() {
 	rdb := Ctx.RDB
 	for {
-		_ = c.conn.SetReadDeadline(time.Now().Add(time.Minute))
+		_ = c.conn.SetReadDeadline(time.Now().Add(time.Second * time.Duration(Ctx.Config.Websocket.ReadTimeout)))
 		_, _, err := c.conn.ReadMessage()
 		if err != nil {
 			fmt.Println(err.Error())
 			c.CloseConn()
 			return
 		}
-		rdb.Expire(context.Background(), "pusher:"+c.userId, 2*time.Minute)
+		rdb.Expire(context.Background(), "pusher:"+c.userId, time.Second*time.Duration(Ctx.Config.Websocket.ReadTimeout))
 	}
 }
 

@@ -3,13 +3,11 @@ package logic
 import (
 	"context"
 	"github.com/google/uuid"
+	"github.com/zeromicro/go-zero/core/logx"
 	"puhser/internal/context"
 	"puhser/proto/push"
 	"puhser/route"
-	"puhser/test"
 	"strconv"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type PushMessageLogic struct {
@@ -34,12 +32,11 @@ func (l *PushMessageLogic) PushMessage(in *push.PushMessageReq) (*push.PushMessa
 		EncodeType: in.EncodeType,
 	}
 	for _, id := range in.UserId {
-		value, ok := client.SMap.Load(strconv.FormatInt(id, 10))
+		value, ok := route.Bucket[id%100].Load(strconv.FormatInt(id, 10))
 		if !ok {
 			continue
 		}
 		c := value.(*route.Client)
-		msg.Session = c.Session
 		c.Send(msg)
 	}
 

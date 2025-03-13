@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"InnerGetWay/internal/config"
-	"InnerGetWay/internal/server"
-	"InnerGetWay/internal/svc"
-	"InnerGetWay/proto/in"
+	"puhser/getway/in/internal/config"
+	"puhser/getway/in/internal/server"
+	"puhser/getway/in/internal/svc"
+	"puhser/getway/in/proto/InnerGetWay"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -26,7 +26,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		in.RegisterPushMessageServiceServer(grpcServer, server.NewPushMessageServiceServer(ctx))
+		InnerGetWay.RegisterPushMessageServiceServer(grpcServer, server.NewPushMessageServiceServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

@@ -7,14 +7,14 @@ package server
 import (
 	"context"
 
-	"InnerGetWay/internal/logic"
-	"InnerGetWay/internal/svc"
-	"InnerGetWay/proto/in"
+	"puhser/getway/in/internal/logic"
+	"puhser/getway/in/internal/svc"
+	"puhser/getway/in/proto/InnerGetWay"
 )
 
 type PushMessageServiceServer struct {
 	svcCtx *svc.ServiceContext
-	in.UnimplementedPushMessageServiceServer
+	InnerGetWay.UnimplementedPushMessageServiceServer
 }
 
 func NewPushMessageServiceServer(svcCtx *svc.ServiceContext) *PushMessageServiceServer {
@@ -23,7 +23,7 @@ func NewPushMessageServiceServer(svcCtx *svc.ServiceContext) *PushMessageService
 	}
 }
 
-func (s *PushMessageServiceServer) PushMessage(ctx context.Context, in *in.PushMessageReq) (*in.PushMessageResp, error) {
+func (s *PushMessageServiceServer) PushMessage(ctx context.Context, in *InnerGetWay.PushMessageReq) (*InnerGetWay.PushMessageResp, error) {
 	l := logic.NewPushMessageLogic(ctx, s.svcCtx)
 	return l.PushMessage(in)
 }

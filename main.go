@@ -11,5 +11,4 @@ func main() {
 
 	go service.Init(ctx)
 	route.Init(ctx)
-
 }

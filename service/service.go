@@ -33,7 +33,6 @@ func Init(ctx *svc.Context) {
 }
 
 func RegisterService(ctx *svc.Context) (etcd.LeaseID, error) {
-
 	EClient := ctx.EClient
 	c := ctx.Config
 	grantResp, err := EClient.Grant(context.Background(), c.Etcd.TTL)

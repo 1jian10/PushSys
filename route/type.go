@@ -15,7 +15,6 @@ type Client struct {
 
 type Message struct {
 	UUId       string `json:"uuid"`
-	Session    string `json:"session"`
 	PayLoad    string `json:"payLoad"`
 	EncodeType string `json:"encodeType"`
 }

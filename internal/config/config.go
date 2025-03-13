@@ -6,6 +6,8 @@ type Config struct {
 	Websocket struct {
 		WriteBufferSize int
 		ReadBufferSize  int
+		WriteTimeout    int64
+		ReadTimeout     int64
 		Port            string
 	}
 	Etcd struct {
@@ -18,6 +20,11 @@ type Config struct {
 	Redis struct {
 		Addr string
 		DB   int
+		TTL  int64
+	}
+	NSQ struct {
+		Topic string
+		Addr  string
 	}
 }
 

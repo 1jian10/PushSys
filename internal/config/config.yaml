@@ -5,9 +5,14 @@ websocket:
   WriteBufferSize: 1024
   #websocket升级监听端口号
   Port: 23311
+  #websocket写超时时间(second)
+  WriteTimeout: 3
+  #websocket读(心跳)超时时间(second)
+  ReadTimeout: 60
 etcd:
   #etcd地址
-  Endpoints: 127.0.0.1:4379
+  Endpoints:
+  - 127.0.0.1:4379
   #连接超时时间(second)
   DialTimeout: 5
   #服务名称
@@ -21,3 +26,10 @@ redis:
   Addr: 127.0.0.1:6379
   #redis数据库编号
   DB: 1
+  #redis设备与push节点映射关系ttl(second)
+  TTL: 120
+nsq:
+  #接收发送全局消息的topic名称
+  topic: GlobalMessage
+  #nsqd地址
+  Addr: 127.0.0.1:4150

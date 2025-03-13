@@ -4,7 +4,7 @@
 // - protoc             v5.29.0--rc1
 // source: in.proto
 
-package in
+package InnerGetWay
 
 import (
 	context "context"
@@ -19,10 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	PushMessageService_PushMessage_FullMethodName = "/in.PushMessageService/PushMessage"
+	PushMessageService_PushMessage_FullMethodName = "/InnerGetWay.PushMessageService/PushMessage"
 )
 
-// PushMessageServiceClient is the test API for PushMessageService service.
+// PushMessageServiceClient is the client API for PushMessageService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PushMessageServiceClient interface {
@@ -108,7 +108,7 @@ func _PushMessageService_PushMessage_Handler(srv interface{}, ctx context.Contex
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var PushMessageService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "in.PushMessageService",
+	ServiceName: "InnerGetWay.PushMessageService",
 	HandlerType: (*PushMessageServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

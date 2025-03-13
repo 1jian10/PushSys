@@ -7,15 +7,15 @@ package pushmessageservice
 import (
 	"context"
 
-	"InnerGetWay/proto/in"
+	"puhser/getway/in/proto/InnerGetWay"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 )
 
 type (
-	PushMessageReq  = in.PushMessageReq
-	PushMessageResp = in.PushMessageResp
+	PushMessageReq  = InnerGetWay.PushMessageReq
+	PushMessageResp = InnerGetWay.PushMessageResp
 
 	PushMessageService interface {
 		PushMessage(ctx context.Context, in *PushMessageReq, opts ...grpc.CallOption) (*PushMessageResp, error)
@@ -33,6 +33,6 @@ func NewPushMessageService(cli zrpc.Client) PushMessageService {
 }
 
 func (m *defaultPushMessageService) PushMessage(ctx context.Context, in *PushMessageReq, opts ...grpc.CallOption) (*PushMessageResp, error) {
-	client := in.NewPushMessageServiceClient(m.cli.Conn())
+	client := InnerGetWay.NewPushMessageServiceClient(m.cli.Conn())
 	return client.PushMessage(ctx, in, opts...)
 }

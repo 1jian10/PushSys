@@ -1,0 +1,10 @@
+Etcd:
+  #etcd地址
+  Endpoints:
+    - 127.0.0.1:4379
+  #连接超时时间(second)
+  DialTimeout: 5
+  #监测服务的key的前缀
+  WatchPrefix: Services/Pusher
+#http监听端口号
+Port: 23331
