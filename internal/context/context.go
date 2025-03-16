@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// Context 程序运行的上下文，用于保存配置，redis连接等
 type Context struct {
 	Config  config.Config
 	RDB     *redis.Client
@@ -24,6 +25,7 @@ func NewContext(file string) *Context {
 		Endpoints:   c.Etcd.EndPoints,
 		DialTimeout: time.Duration(c.Etcd.DialTimeout) * time.Second,
 	})
+
 	if err != nil {
 		panic(err)
 	}

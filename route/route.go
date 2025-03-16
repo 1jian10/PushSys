@@ -28,15 +28,18 @@ func ToWebSocket(ctx *gin.Context) {
 	if !websocket.IsWebSocketUpgrade(ctx.Request) {
 		return
 	}
+
 	session, err := ctx.Cookie("session_id")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
+
 	conn, err := UpGrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
+
 	NewClient(conn, session)
 }

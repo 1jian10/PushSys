@@ -1,6 +1,8 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"github.com/spf13/viper"
+)
 
 type Config struct {
 	Websocket struct {
@@ -16,6 +18,7 @@ type Config struct {
 		Name        string
 		Addr        string
 		TTL         int64
+		WatchPrefix string
 	}
 	Redis struct {
 		Addr string
@@ -26,6 +29,9 @@ type Config struct {
 		Topic string
 		Addr  string
 	}
+	Model       int
+	IP          string
+	VirtualNums int
 }
 
 func ReadConfig(file string) Config {

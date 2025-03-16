@@ -13,4 +13,6 @@ type Config struct {
 		Addr  string
 		Topic string
 	}
+	Model       int
+	VirtualNums int
 }

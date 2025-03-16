@@ -21,6 +21,8 @@ etcd:
   Addr: 127.0.0.1:23301
   #租约时间(second)
   TTL: 10
+  #一致性hash下，watch的key的前缀
+  WatchPrefix: Services/Pusher/
 redis:
   #redis地址
   Addr: 127.0.0.1:6379
@@ -33,3 +35,11 @@ nsq:
   topic: GlobalMessage
   #nsqd地址
   Addr: 127.0.0.1:4150
+#集群模式
+#1:random(随机路由，redis存储映射关系)
+#2:ConsistentHash(一致性hash)
+model: 1
+#本地ip地址
+ip: 127.0.0.1
+#一致性hash模式下，每个真实节点有多少个虚拟节点
+virtualNums: 100

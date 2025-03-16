@@ -24,13 +24,16 @@ func NewPushMessageLogic(ctx context.Context, svcCtx *svc.Context) *PushMessageL
 	}
 }
 
+// PushMessage 推送消息的rpc处理函数
 func (l *PushMessageLogic) PushMessage(in *push.PushMessageReq) (*push.PushMessageResp, error) {
+	//这里uuid的生成应该由上游调用者生成，后续进行改动
 	uid := uuid.New().String()
 	msg := &route.Message{
 		UUId:       uid,
 		PayLoad:    in.PayLoad,
 		EncodeType: in.EncodeType,
 	}
+
 	for _, id := range in.UserId {
 		value, ok := route.Bucket[id%100].Load(strconv.FormatInt(id, 10))
 		if !ok {

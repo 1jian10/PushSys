@@ -1,6 +1,7 @@
 package main
 
 import (
+	cshash "puhser/consistenthash"
 	svc "puhser/internal/context"
 	"puhser/mq"
 	"puhser/route"
@@ -9,7 +10,7 @@ import (
 
 func main() {
 	ctx := svc.NewContext("./internal/config/config.yaml")
-
+	cshash.Init(ctx)
 	go service.Init(ctx)
 	mq.Init(ctx)
 	route.Init(ctx)
