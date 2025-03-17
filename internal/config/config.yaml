@@ -38,7 +38,7 @@ nsq:
 #集群模式
 #1:random(随机路由，redis存储映射关系)
 #2:ConsistentHash(一致性hash)
-model: 1
+model: 2
 #本地ip地址
 ip: 127.0.0.1
 #一致性hash模式下，每个真实节点有多少个虚拟节点

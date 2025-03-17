@@ -29,12 +29,28 @@ func Init(ctx *svc.Context) {
 
 	grpcServer := grpc.NewServer()
 	push.RegisterPushMessageServiceServer(grpcServer, server.NewPushMessageServiceServer(ctx))
+	fmt.Println("rpc begin listening:" + ctx.Config.Etcd.Addr)
+	if ctx.Config.Model == 2 {
+		InitHash(ctx)
+		go Watch(ctx)
+	}
 	if err = grpcServer.Serve(lis); err != nil {
 		panic(err.Error())
 	}
 
-	fmt.Println("rpc begin listening:" + ctx.Config.Etcd.Addr)
-	go Watch(ctx)
+}
+
+func InitHash(ctx *svc.Context) {
+	kv := etcd.NewKV(ctx.EClient)
+	resp, err := kv.Get(context.Background(), ctx.Config.Etcd.WatchPrefix+"/", etcd.WithPrefix())
+	if err != nil {
+		panic(err.Error())
+	}
+	ins := make([]string, 0)
+	for _, ev := range resp.Kvs {
+		ins = append(ins, string(ev.Value))
+	}
+	cshash.Update([]string{}, ins)
 }
 
 // Watch 获取etcd中其他节点的变化，并对节点进行重新分配
@@ -59,9 +75,6 @@ func Watch(ctx *svc.Context) {
 
 // RegisterService 向etcd中注册节点并自动续约
 func RegisterService(ctx *svc.Context) (etcd.LeaseID, error) {
-	if ctx.Config.Model == 2 {
-		cshash.Update([]string{}, []string{ctx.Config.IP + ":" + ctx.Config.Websocket.Port})
-	}
 	EClient := ctx.EClient
 	c := ctx.Config
 

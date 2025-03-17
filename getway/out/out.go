@@ -5,7 +5,7 @@ import (
 	"OutGetWay/route"
 )
 
-// 外部网关，随机获取一个内部pusher节点地址
+// 外部网关，路由到内部pusher节点
 func main() {
 	ctx := svc.NewContext("./config/config.yaml")
 	route.Init(ctx)

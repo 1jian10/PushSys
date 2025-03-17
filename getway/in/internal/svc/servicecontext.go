@@ -64,7 +64,7 @@ func Watch(svc *ServiceContext) {
 				ins = append(ins, string(ev.Kv.Value))
 			} else {
 				del = append(del, string(ev.Kv.Value))
-				value, ok := svc.Services.Load(ev.Kv.Key)
+				value, ok := svc.Services.Load(ev.Kv.Value)
 				if ok {
 					c, _ := value.(*grpc.ClientConn)
 					_ = c.Close()

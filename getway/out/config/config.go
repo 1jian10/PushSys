@@ -10,8 +10,9 @@ type Config struct {
 		DialTimeout int64
 		WatchPrefix string
 	}
-	Port  string
-	Model int
+	Port        string
+	Model       int
+	VirtualNums int
 }
 
 func ReadConfig(file string) Config {

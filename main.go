@@ -10,7 +10,7 @@ import (
 
 func main() {
 	ctx := svc.NewContext("./internal/config/config.yaml")
-	cshash.Init(ctx)
+	cshash.Init(ctx.Config.VirtualNums)
 	go service.Init(ctx)
 	mq.Init(ctx)
 	route.Init(ctx)
