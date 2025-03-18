@@ -25,7 +25,3 @@ func consistentHashInit(resp *etcd.GetResponse) {
 		OldAddr = append(OldAddr, string(v.Value))
 	}
 }
-
-func consistentHashSelect() {
-
-}
